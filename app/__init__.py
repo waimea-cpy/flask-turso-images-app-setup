@@ -94,21 +94,21 @@ def add_a_thing():
 
     image_file = request.files['image']
 
-    if image_file:
-        image_data = image_file.read()
-
-        with connect_db() as client:
-            # Add the thing to the DB
-            sql = "INSERT INTO things (name, price, image) VALUES (?, ?, ?)"
-            values = [name, price, image_data]
-            client.execute(sql, values)
-
-            # Go back to the home page
-            flash(f"Thing '{name}' added", "success")
-            return redirect("/things")
-
-    else:
+    if not image_file:
         return server_error("Problem uploading image")
+
+    image_data = image_file.read()
+    mime_type = image_file.mimetype
+
+    with connect_db() as client:
+        # Add the thing to the DB
+        sql = "INSERT INTO things (name, price, image, mime) VALUES (?, ?, ?, ?)"
+        values = [name, price, image_data, mime_type]
+        client.execute(sql, values)
+
+        # Go back to the home page
+        flash(f"Thing '{name}' added", "success")
+        return redirect("/things")
 
 
 #-----------------------------------------------------------
@@ -133,14 +133,14 @@ def delete_a_thing(id):
 @app.route('/image/<int:id>')
 def get_image(id):
     with connect_db() as client:
-        sql = "SELECT image FROM things WHERE id = ?"
+        sql = "SELECT image, mime FROM things WHERE id = ?"
         values = [id]
         result = client.execute(sql, values)
 
         if result.rows:
             return send_file(
                 io.BytesIO(result.rows[0]["image"]),
-                mimetype='image/png'  # or 'image/jpeg' depending on your image type
+                mimetype=result.rows[0]["mime"]
             )
 
         return "Image not found", 404
