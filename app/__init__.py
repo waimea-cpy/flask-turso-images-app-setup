@@ -2,10 +2,12 @@
 # App Creation and Launch
 #===========================================================
 
-from flask import Flask, render_template, request, flash, session, redirect
+from flask import Flask, render_template, request, flash, session, redirect, send_file
 from app.db import init_db, connect_db, handle_db_errors
 from app.errors import register_error_handlers
+from app.errors import server_error
 import html
+import io
 
 
 # Create the app
@@ -90,15 +92,23 @@ def add_a_thing():
     name = html.escape(name)
     price = html.escape(price)
 
-    with connect_db() as client:
-        # Add the thing to the DB
-        sql = "INSERT INTO things (name, price) VALUES (?, ?)"
-        values = [name, price]
-        client.execute(sql, values)
+    image_file = request.files['image']
 
-        # Go back to the home page
-        flash(f"Thing '{name}' added", "success")
-        return redirect("/things")
+    if image_file:
+        image_data = image_file.read()
+
+        with connect_db() as client:
+            # Add the thing to the DB
+            sql = "INSERT INTO things (name, price, image) VALUES (?, ?, ?)"
+            values = [name, price, image_data]
+            client.execute(sql, values)
+
+            # Go back to the home page
+            flash(f"Thing '{name}' added", "success")
+            return redirect("/things")
+
+    else:
+        return server_error("Problem uploading image")
 
 
 #-----------------------------------------------------------
@@ -117,4 +127,21 @@ def delete_a_thing(id):
         flash("Thing deleted", "warning")
         return redirect("/things")
 
+
+
+
+@app.route('/image/<int:id>')
+def get_image(id):
+    with connect_db() as client:
+        sql = "SELECT image FROM things WHERE id = ?"
+        values = [id]
+        result = client.execute(sql, values)
+
+        if result.rows:
+            return send_file(
+                io.BytesIO(result.rows[0]["image"]),
+                mimetype='image/png'  # or 'image/jpeg' depending on your image type
+            )
+
+        return "Image not found", 404
 
