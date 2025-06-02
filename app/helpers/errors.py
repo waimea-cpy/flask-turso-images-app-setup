@@ -1,7 +1,6 @@
 #===========================================================
-# Error Handling Functions
+# Error Related Functions
 #===========================================================
-
 
 from flask import render_template
 
@@ -14,6 +13,13 @@ def server_error(message):
 
 
 #-----------------------------------------------------------
+# 404 Page not found error page
+#-----------------------------------------------------------
+def not_found_error():
+    return render_template("pages/404.jinja"), 404
+
+
+#-----------------------------------------------------------
 # Provide error handlers to the Flask app
 #-----------------------------------------------------------
 def register_error_handlers(app):
@@ -22,7 +28,7 @@ def register_error_handlers(app):
     # 404 Page not found error page
     @app.errorhandler(404)
     def show_not_found(e):
-        return render_template("pages/404.jinja"), 404
+        return not_found_error()
 
 
     #------------------------------
