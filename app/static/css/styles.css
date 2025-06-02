@@ -47,6 +47,7 @@
 
 #messages .message {
     list-style: none;
+    text-align: center;
     padding: 1rem;
     max-width: 30ch;
     margin-bottom: 1rem;
