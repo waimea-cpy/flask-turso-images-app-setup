@@ -60,7 +60,7 @@ def show_all_things():
 @handle_db_errors
 def show_one_thing(id):
     with connect_db() as client:
-        # Get the things from the DB
+        # Get the thing details from the DB
         sql = "SELECT id, name, price FROM things WHERE id=?"
         values = [id]
         result = client.execute(sql, values)

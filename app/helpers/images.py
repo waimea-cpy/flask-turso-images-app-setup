@@ -3,7 +3,7 @@
 #===========================================================
 
 from flask import send_file, make_response
-import io
+from io import BytesIO
 from app.helpers.errors import not_found_error
 
 
@@ -18,7 +18,7 @@ def image_file(result, data_column, mime_column):
     if result.rows:
         # Yes, so create a file from the data
         response = make_response(send_file(
-            io.BytesIO(result.rows[0][data_column]),
+            BytesIO(result.rows[0][data_column]),
             mimetype=result.rows[0][mime_column]
         ))
 

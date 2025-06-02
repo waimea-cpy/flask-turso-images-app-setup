@@ -2,6 +2,9 @@
 
 This is template for a simple [Flask](https://flask.palletsprojects.com) application with a [Turso](https://turso.tech/) SQLite database to store and provide data. The app uses [Jinja2](https://jinja.palletsprojects.com/templates/) templating for structuring pages and data, and [PicoCSS](https://picocss.com/) for styling.
 
+The app includes handlers to deal with **image data stored in the DB**, and retrieval of that image data within HTML templates.
+
+
 ## Project Structure
 
 - **app** folder
@@ -36,6 +39,21 @@ This is template for a simple [Flask](https://flask.palletsprojects.com) applica
 - **.env** - Environment variable, e.g. Turso secrets
 - **.env-example** - Demo .env file
 - **.gitignore** - Prevents venv and .env from being pushed
+
+
+## Demo Database Schema
+
+The database used for this demo has the following schema:
+
+```sql
+CREATE TABLE `things` (
+    `id`         INTEGER PRIMARY KEY AUTOINCREMENT,
+    `name`       TEXT    NOT NULL,
+    `price`      INTEGER NOT NULL DEFAULT 0,
+    `image_data` BLOB    NOT NULL,
+    `image_mime` TEXT    NOT NULL
+);
+```
 
 
 ## Project Setup and Deployment

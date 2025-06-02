@@ -5,19 +5,19 @@
 from libsql_client import create_client_sync, LibsqlError
 from contextlib import contextmanager
 from dotenv import load_dotenv
-import functools
-import os
+from functools import wraps
+from os import getenv, path
 from app.helpers.errors import server_error
 
 
 # Load Turso environment variables from the .env file
 load_dotenv()
-TURSO_URL = os.getenv("TURSO_URL")
-TURSO_KEY = os.getenv("TURSO_KEY")
+TURSO_URL = getenv("TURSO_URL")
+TURSO_KEY = getenv("TURSO_KEY")
 
 # Define the locations of our DB files
-DB_FOLDER   = os.path.join(os.path.dirname(__file__), "db")
-SCHEMA_FILE = os.path.join(DB_FOLDER, "schema.sql")
+DB_FOLDER   = path.join(path.dirname(__file__), "db")
+SCHEMA_FILE = path.join(DB_FOLDER, "schema.sql")
 
 
 #-----------------------------------------------------------
@@ -41,12 +41,13 @@ def connect_db():
 #-----------------------------------------------------------
 # A decorator function to handle errors connecting to the DB
 #-----------------------------------------------------------
-def handle_db_errors(view_func):
-    @functools.wraps(view_func)
+def handle_db_errors(func):
+    @wraps(func)
+    # Wrap the given function...
     def wrapper(*args, **kwargs):
         try:
             # Attempt to run the given function
-            return view_func(*args, **kwargs)
+            return func(*args, **kwargs)
 
         except LibsqlError as e:
             # Caught a DB related error

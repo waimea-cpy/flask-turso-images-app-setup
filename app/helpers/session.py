@@ -3,7 +3,7 @@
 #===========================================================
 
 from dotenv import load_dotenv
-import os
+from os import getenv
 
 
 #-----------------------------------------------------------
@@ -11,5 +11,5 @@ import os
 #-----------------------------------------------------------
 def init_session(app):
     load_dotenv()
-    SESSION_KEY = os.getenv("SESSION_KEY")
+    SESSION_KEY = getenv("SESSION_KEY")
     app.secret_key = SESSION_KEY

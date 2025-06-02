@@ -1,8 +1,7 @@
 {#=====================================================
   Thing page
-  - Details of a given thing
-  - Links to perform actions: delete
-  - Link back to the main list
+  - Shows details of a single thing
+  - Has a delete link to remove it
 =====================================================#}
 
 {% extends 'pages/base.jinja' %}
@@ -10,7 +9,7 @@
 
 {% block title %}
 
-    Flask Demo
+    Flask Demo - Single Thing
 
 {% endblock %}
 
@@ -23,12 +22,12 @@
     <article class="thing">
 
         <header>
-            <h3>Name: {{ thing.name }}</h3>
+            <h3>{{ thing.name }}</h3>
         </header>
 
         <img src="/image/{{ thing.id }}" alt="{{ thing.name }}">
 
-        <p>Price: ${{ thing.price }}</p>
+        <p>Price: <strong>${{ thing.price }}</strong></p>
 
         <footer>
             <a href="/delete/{{ thing.id }}" onclick="return confirm('Really delete?');">Delete</a>
