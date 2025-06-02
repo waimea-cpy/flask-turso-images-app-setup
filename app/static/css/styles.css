@@ -20,6 +20,14 @@
 }
 
 
+/* THING PAGE -------------------------------------------- */
+
+.thing img {
+    max-width: 20rem;
+    margin-bottom: 1rem;
+}
+
+
 /* ABOUT PAGE -------------------------------------------- */
 
 #tech-stack {
