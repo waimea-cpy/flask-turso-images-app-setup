@@ -45,15 +45,16 @@
     </header>
 
 
+    {# Show flash messages from any previous events #}
+    {% include "components/messages.jinja" %}
+
+
     <main>
 
         {% block content %}
         {% endblock %}
 
     </main>
-
-
-    {% include "components/messages.jinja" %}
 
 
     {# Show debug info. Comment this out if not needed #}

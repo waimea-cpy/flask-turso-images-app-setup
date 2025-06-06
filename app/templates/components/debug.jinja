@@ -22,12 +22,12 @@
         <p><strong>Request Data</strong></p>
 
         <ul>
-            <li>Path: <strong>{{ request.path }}</strong></li>
-            <li>Method: <strong>{{ request.method }}</strong></li>
-            <li>Route: <strong>{{ request.url_rule }}</strong></li>
-            <li>Func: <strong>{{ request.endpoint }}</strong></li>
+            <li>Path:   <strong>{{ request.path     }}</strong></li>
+            <li>Method: <strong>{{ request.method   }}</strong></li>
+            <li>Route:  <strong>{{ request.url_rule }}</strong></li>
+            <li>Func:   <strong>{{ request.endpoint }}</strong></li>
             <li>Args:
-                {% if request.view_args.items() %}
+                {% if request.view_args and request.view_args.items() %}
                     <ul>
                         {% for key, value in request.view_args.items() %}
                             <li><strong>{{ key }}: {{ value }}</strong></li>
