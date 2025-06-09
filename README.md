@@ -1,4 +1,4 @@
-# A Basic Flask App Linked to a Supabase Database with Images
+# A Basic Flask App Linked to a Turso Database with Images
 
 This is template for a simple [Flask](https://flask.palletsprojects.com) application with a [Turso](https://turso.tech/) SQLite database to store and provide data. The app uses [Jinja2](https://jinja.palletsprojects.com/templates/) templating for structuring pages and data, and [PicoCSS](https://picocss.com/) for styling.
 
