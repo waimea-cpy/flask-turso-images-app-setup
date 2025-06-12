@@ -140,12 +140,14 @@ Deploying to **Render**, an external web app host, is pretty simple. Once setup,
     - Region: **Singapore**
     - Root Directory: *Leave blank*
     - Build Command: `pip install -r requirements.txt`
-    - Start Command: `flask run --host=0.0.0.0 --port=10000`
+    - Start Command: `flask run`
     - Instance Type: **Free**
-    - Environment Variables (copy from your .env file):
-        - TURSO_URL
-        - TURSO_KEY
-        - SESSION_KEY
+    - Environment Variables:
+        - TURSO_URL      *copy from your .env file*
+        - TURSO_KEY      *copy from your .env file*
+        - SESSION_KEY    *copy from your .env file*
+        - FLASK_RUN_HOST **0.0.0.0**
+        - FLASK_RUN_PORT **10000**
 
 
 2. **Deploy** the web service, and it should be good to go!
