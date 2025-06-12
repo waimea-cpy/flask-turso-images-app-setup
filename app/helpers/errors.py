@@ -1,10 +1,19 @@
 #===========================================================
-# Error Related Functions
+# Error Handling Functions
 #===========================================================
 
 from flask import render_template
+from colorama import Fore, init
 import traceback
 import sys
+
+# Colorama config
+init(autoreset=True)
+
+# Logging colours
+ERR_COL = Fore.RED
+CODE_COL = Fore.BLUE
+ERR_BAR = f"{ERR_COL}!{Fore.RESET}"
 
 
 #-----------------------------------------------------------
@@ -24,7 +33,7 @@ def not_found_error():
 #-----------------------------------------------------------
 # Provide error handlers to the Flask app
 #-----------------------------------------------------------
-def register_error_handlers(app):
+def init_error(app):
 
     #------------------------------
     # 404 Page not found error page
@@ -59,24 +68,50 @@ def register_error_handlers(app):
                     app_frame = frame
                     break
 
+            errorName = type(e).__name__
+            errorDetails = str(e)
+
+            # Deal with libSQL exceptions relating to SQL errors
+            sqlError = errorName == 'KeyError' and errorDetails == "'result'"
+            if sqlError:
+                errorName = "SQL Error"
+                errorDetails = "There is an error in your SQL"
+
+            print()
+            print(f"           {ERR_COL}  Error: {ERR_COL}{errorName}")
+            print(f"           {ERR_COL} Detail: {ERR_COL}{errorDetails}")
+
             error_msg = f"""
                 <table class="error">
-                    <tr><th>Error</th><td>{type(e).__name__}</td></tr>
-                    <tr><th>Details</th><td>{str(e)}</td></tr>
+                    <tr><th>Error</th><td>{errorName}</td></tr>
+                    <tr><th>Details</th><td>{errorDetails}</td></tr>
             """
 
             # Do we have a matching error frame?
             if app_frame:
-                filename = app_frame.filename.replace(app.root_path, "")
-                error_msg += f"""
-                    <tr><th>Code</th><td>{app_frame.line}</td></tr>
-                    <tr><th>File</th><td>{filename}</td></tr>
-                    <tr><th>Line</th><td>{app_frame.lineno}</td></tr>
-                """
+                if not sqlError:
+                    filename = app_frame.filename.replace(app.root_path, "")
+
+                    print(f"           {ERR_COL}   File: {CODE_COL}{filename}")
+                    print(f"           {ERR_COL}   Line: {CODE_COL}{app_frame.lineno}")
+                    print(f"           {ERR_COL}   Code: {CODE_COL}{app_frame.line}")
+                    print()
+
+                    error_msg += f"""
+                        <tr><th>File</th><td>{filename}</td></tr>
+                        <tr><th>Line</th><td>{app_frame.lineno}</td></tr>
+                        <tr><th>Code</th><td><code>{app_frame.line}</code></td></tr>
+                    """
+                else:
+                    if app.dbSQL:
+                        print(f"           {ERR_COL}   Code: {CODE_COL}{app.dbSQL}")
+                        print()
+
+                        error_msg += f"""
+                            <tr><th>Code</th><td><code>{app.dbSQL}</code></td></tr>
+                        """
 
             error_msg += "</table>"
-
-            print(app.root_path)
 
             return server_error(error_msg)
 
