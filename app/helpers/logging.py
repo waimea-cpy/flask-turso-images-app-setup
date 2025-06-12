@@ -19,8 +19,8 @@ SESS_COL = Fore.YELLOW
 
 # Load Flask and Turso environment variables from the .env file
 load_dotenv()
-HOST = getenv("FLASK_RUN_HOST")
-PORT = getenv("FLASK_RUN_PORT")
+HOST = getenv("FLASK_RUN_HOST", "localhost")
+PORT = getenv("FLASK_RUN_PORT", 5000)
 
 # Disable built-in logging
 logging.getLogger('werkzeug').setLevel(logging.CRITICAL)
