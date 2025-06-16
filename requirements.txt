@@ -13,3 +13,6 @@ python-dotenv
 
 # Coloured text
 colorama
+
+# Timezones
+tzdata
