@@ -47,7 +47,8 @@ def show_all_things():
     with connect_db() as client:
         # Get all the things from the DB
         sql = "SELECT id, name FROM things ORDER BY name ASC"
-        result = client.execute(sql)
+        params = []
+        result = client.execute(sql, params)
         things = result.rows
 
         # And show them on the page
@@ -62,8 +63,8 @@ def show_one_thing(id):
     with connect_db() as client:
         # Get the thing details from the DB
         sql = "SELECT id, name, price FROM things WHERE id=?"
-        values = [id]
-        result = client.execute(sql, values)
+        params = [id]
+        result = client.execute(sql, params)
 
         # Did we get a result?
         if result.rows:
@@ -101,8 +102,8 @@ def add_a_thing():
     with connect_db() as client:
         # Add the thing to the DB
         sql = "INSERT INTO things (name, price, image_data, image_mime) VALUES (?, ?, ?, ?)"
-        values = [name, price, image_data, mime_type]
-        client.execute(sql, values)
+        params = [name, price, image_data, mime_type]
+        client.execute(sql, params)
 
         # Go back to the home page
         flash(f"Thing '{name}' added", "success")
@@ -117,8 +118,8 @@ def delete_a_thing(id):
     with connect_db() as client:
         # Delete the thing from the DB
         sql = "DELETE FROM things WHERE id=?"
-        values = [id]
-        client.execute(sql, values)
+        params = [id]
+        client.execute(sql, params)
 
         # Go back to the home page
         flash("Thing deleted", "success")
@@ -132,8 +133,8 @@ def delete_a_thing(id):
 def get_image(id):
     with connect_db() as client:
         sql = "SELECT image_data, image_mime FROM things WHERE id = ?"
-        values = [id]
-        result = client.execute(sql, values)
+        params = [id]
+        result = client.execute(sql, params)
 
         return image_file(result, "image_data", "image_mime")
 
