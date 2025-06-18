@@ -31,6 +31,7 @@ The app includes handlers to deal with **image data stored in the DB**, and retr
         - **errors.py** - Functions for error reporting
         - **session.py** - Functions to manage session data
         - **images.py** - Functions to load DB images
+        - **time.py** - Functions to help format timestamps
 
     - **\_\_init__.py** - App launcher code
 
