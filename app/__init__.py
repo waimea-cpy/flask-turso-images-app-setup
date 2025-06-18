@@ -86,9 +86,8 @@ def add_a_thing():
     name  = request.form.get("name")
     price = request.form.get("price")
 
-    # Sanitise the inputs
+    # Sanitise the text inputs
     name = html.escape(name)
-    price = html.escape(price)
 
     # Get the uploaded image
     image_file = request.files['image']
